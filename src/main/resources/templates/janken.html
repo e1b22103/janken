@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>jankengame</title>
+</head>
+
+<body>
+  <h1>Janken GAME!</h1>
+  <p id="greeting"></p>
+  <script>
+    // URLからクエリパラメータを取得する関数
+    function getQueryParams(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // ユーザー名を取得して表示する
+    const username = getQueryParams('name');
+    if (username) {
+      document.getElementById('greeting').innerText = `Hi ${username}`;
+    }
+  </script>
+</body>
+
+</html>
