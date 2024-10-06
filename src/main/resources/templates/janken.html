@@ -8,20 +8,17 @@
 
 <body>
   <h1>Janken GAME!</h1>
-  <p id="greeting"></p>
-  <script>
-    // URLからクエリパラメータを取得する関数
-    function getQueryParams(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-
-    // ユーザー名を取得して表示する
-    const username = getQueryParams('name');
-    if (username) {
-      document.getElementById('greeting').innerText = `Hi ${username}`;
-    }
-  </script>
+  <p th:if="${username}">Hi <span th:text="${username}"></span>!</p>
+  <p>
+    <a href="/janken?hand=rock">グー</a>
+    <a href="/janken?hand=scissors">チョキ</a>
+    <a href="/janken?hand=paper">パー</a>
+  </p>
+  <div th:if="${userHand != null}">
+    <p>あなたの手: <span th:text="${userHand}"></span></p>
+    <p>相手の手: <span th:text="${cpuHand}"></span></p>
+    <p>結果: <span th:text="${result}"></span></p>
+  </div>
 </body>
 
 </html>
