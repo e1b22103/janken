@@ -1,9 +1,16 @@
 package oit.is.z2421.kaizi.janken.controller;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import oit.is.z2421.kaizi.janken.model.Entry;
 
 /*
  * クラスの前に@Controllerをつけていると，HTTPリクエスト（GET/POSTなど）があったときに，このクラスが呼び出される
@@ -11,14 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class JankenController {
 
+  @Autowired
+  private Entry entry;
+
   @GetMapping("/janken")
-  public String janken(@RequestParam(required = false) String name, @RequestParam(required = false) String hand, Model model) {
+  public String janken(@RequestParam(required = false) String hand,
+      Principal prin, ModelMap model) {
+    String loginUser = prin.getName();
+    this.entry.addUser(loginUser);
+    model.addAttribute("entry", this.entry);
+    model.addAttribute("username", loginUser);
     String cpuHand = "rock";
     String result = "";
-
-    if (name != null && !name.isEmpty()) {
-      model.addAttribute("username", name);
-    }
 
     if (hand != null) {
       if (hand.equals("rock")) {
@@ -38,7 +49,10 @@ public class JankenController {
   }
 
   @GetMapping("/janken.html")
-  public String jankenHtml(Model model) {
+  public String jankenHtml(Principal prin, ModelMap model) {
+    String loginUser = prin.getName();
+    model.addAttribute("entry", this.entry);
+    model.addAttribute("username", loginUser);
     return "janken";
   }
 }
