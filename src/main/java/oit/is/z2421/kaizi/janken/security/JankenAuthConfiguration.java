@@ -12,7 +12,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class Sample3AuthConfiguration {
+public class JankenAuthConfiguration {
   /**
    * 認可処理に関する設定（認証されたユーザがどこにアクセスできるか）
    *
@@ -56,11 +56,13 @@ public class Sample3AuthConfiguration {
         .password("{bcrypt}$2y$05$AzNAU89Cf2h5ghJg2gKGxuch0iSkdRyJ1RlPxqzWlrLVt00jd4UTK").roles("USER").build();
     UserDetails user2 = User.withUsername("user2")
         .password("{bcrypt}$2y$05$QTc2gAEod8WH4EKdCCihve.D.Z0o5w7XIIa4by8i9G1CsIln/Z6MO").roles("USER").build();
+    UserDetails user3 = User.withUsername("ほんだ")
+        .password("{bcrypt}$2y$05$JIyvP.0i6XkySiDdEJg6TupFjB7y3gnPaieXiuMXFWAZfLOqzXb.C").roles("USER").build();
     UserDetails admin = User.withUsername("admin")
         .password("{bcrypt}$2y$10$ngxCDmuVK1TaGchiYQfJ1OAKkd64IH6skGsNw1sLabrTICOHPxC0e").roles("ADMIN").build();
 
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
-    return new InMemoryUserDetailsManager(user1, user2, admin);
+    return new InMemoryUserDetailsManager(user1, user2, user3, admin);
   }
 
 }
