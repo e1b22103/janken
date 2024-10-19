@@ -5,17 +5,18 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import oit.is.z2421.kaizi.janken.model.Entry;
+//import oit.is.z2421.kaizi.janken.model.Entry;
+import oit.is.z2421.kaizi.janken.model.Match;
+import oit.is.z2421.kaizi.janken.model.MatchMapper;
 import oit.is.z2421.kaizi.janken.model.User;
 import oit.is.z2421.kaizi.janken.model.UserMapper;
-//import oit.is.z2421.kaizi.janken.model.UserInfo;
 
 /*
  * クラスの前に@Controllerをつけていると，HTTPリクエスト（GET/POSTなど）があったときに，このクラスが呼び出される
@@ -23,9 +24,11 @@ import oit.is.z2421.kaizi.janken.model.UserMapper;
 @Controller
 public class JankenController {
 
-  @Autowired
   // private Entry entry;
+  @Autowired
   private UserMapper UserMapper;
+  @Autowired
+  private MatchMapper MatchMapper;
 
   @GetMapping("/janken")
   public String janken(@RequestParam(required = false) String hand,
@@ -54,9 +57,11 @@ public class JankenController {
     model.addAttribute("userHand", hand);
     model.addAttribute("cpuHand", cpuHand);
 
-    // ユーザーリストの取得と表示
+    // ユーザーリストと試合結果の取得・表示
     ArrayList<User> users = UserMapper.selectAllName();
     model.addAttribute("users", users);
+    ArrayList<Match> matches = MatchMapper.selectAllData();
+    model.addAttribute("matches", matches);
 
     // 名前が入力された場合はそれもモデルに追加
     if (name != null && !name.isEmpty()) {
@@ -77,7 +82,7 @@ public class JankenController {
    * model.addAttribute("username", loginUser);
    * String cpuHand = "rock";
    * String result = "";
-   * 
+   *
    * if (hand != null) {
    * if (hand.equals("rock")) {
    * result = cpuHand.equals("rock") ? "引き分け" : (cpuHand.equals("scissors") ? "勝ち"
@@ -90,14 +95,14 @@ public class JankenController {
    * "引き分け");
    * }
    * }
-   * 
+   *
    * model.addAttribute("result", result);
    * model.addAttribute("userHand", hand);
    * model.addAttribute("cpuHand", cpuHand);
-   * 
+   *
    * return "janken";
    * }
-   * 
+   *
    * @GetMapping("/janken.html")
    * public String jankenHtml(@RequestParam(required = false) String name,
    * ModelMap model) {
