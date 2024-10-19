@@ -12,14 +12,15 @@
   </p>
   <h1>Janken GAME!</h1>
 
+  <p th:if="${name != null}">Hi <span th:text="${name}"></span>!</p>
+
+  <p th:if="${users}">
   <p>エントリー</p>
-  <p th:if="${entry}">
-    <ul>
-      <li th:each="user : ${entry.users}">[[${user}]]</li>
-    </ul>
+  <ul>
+    <li th:each="user:${users}">[[${user.name}]]</li>
+  </ul>
   </p>
 
-  <p th:if="${username}">Hi <span th:text="${username}"></span>!</p>
   <p>
     <a href="/janken?hand=rock">グー</a>
     <a href="/janken?hand=scissors">チョキ</a>
