@@ -14,7 +14,7 @@ public interface UserMapper {
 
   @Insert("INSERT INTO users (name) VALUES (#{name});")
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
-  void insertChamber(User users);
+  void insertUser(User user);
 
   @Select("SELECT * from users where name = #{name}")
   ArrayList<User> selectAllByName(String name);

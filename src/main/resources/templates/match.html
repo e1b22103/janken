@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+
+<head>
+  <meta charset="utf-8">
+  <title>match</title>
+</head>
+
+<body>
+  <p><a href="/logout">ログアウト</a></p>
+  <h1>Match</h1>
+
+  <h2 th:if="${name != null and user != null}">
+    <span th:text="${name}"></span> V.S.
+    <span th:text="${user.name}"></span>
+  </h2>
+
+  <p>
+    <span>Select Your Hand: </span>
+    <a href="/match?hand=rock">rock</a>
+    <a href="/match?hand=scissors">scissors</a>
+    <a href="/match?hand=paper">paper</a>
+  </p>
+  <div th:if="${userHand != null}">
+    <p>あなたの手: <span th:text="${userHand}"></span></p>
+    <p>相手の手: <span th:text="${cpuHand}"></span></p>
+    <p>結果: <span th:text="${result}"></span></p>
+  </div>
+
+  <p><a href="/janken">もどる</a></p>
+</body>
+
+</html>

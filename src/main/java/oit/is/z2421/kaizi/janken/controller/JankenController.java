@@ -31,14 +31,28 @@ public class JankenController {
   private MatchMapper MatchMapper;
 
   @GetMapping("/janken")
-  public String janken(@RequestParam(required = false) String hand,
-      @RequestParam(required = false) String name,
-      Principal prin, ModelMap model) {
+  public String janken(Principal prin, ModelMap model) {
     // ログインユーザー名の取得
     String loginUser = prin.getName();
-    model.addAttribute("username", loginUser);
+    model.addAttribute("name", loginUser);
 
-    // じゃんけんの結果を計算
+    // ユーザーリストと試合結果の取得・表示
+    ArrayList<User> users = UserMapper.selectAllName();
+    model.addAttribute("users", users);
+    ArrayList<Match> matches = MatchMapper.selectAllData();
+    model.addAttribute("matches", matches);
+
+    // janken.html テンプレートを表示
+    return "janken";
+  }
+
+  @GetMapping("/match")
+  public String match(@RequestParam(required = false) String hand,
+      @RequestParam int id,
+      ModelMap model, Principal prin) {
+
+    String loginUser = prin.getName();
+    model.addAttribute("name", loginUser);
     String cpuHand = "rock"; // CPUの手（固定）
     String result = "";
 
@@ -51,82 +65,14 @@ public class JankenController {
         result = cpuHand.equals("rock") ? "勝ち" : (cpuHand.equals("scissors") ? "負け" : "引き分け");
       }
     }
-
     // じゃんけん結果のモデルへの追加
     model.addAttribute("result", result);
     model.addAttribute("userHand", hand);
     model.addAttribute("cpuHand", cpuHand);
 
-    // ユーザーリストと試合結果の取得・表示
-    ArrayList<User> users = UserMapper.selectAllName();
-    model.addAttribute("users", users);
-    ArrayList<Match> matches = MatchMapper.selectAllData();
-    model.addAttribute("matches", matches);
+    User user = UserMapper.selectById(id);
+    model.addAttribute("user", user);
 
-    // 名前が入力された場合はそれもモデルに追加
-    if (name != null && !name.isEmpty()) {
-      model.addAttribute("name", name);
-    }
-
-    // janken.html テンプレートを表示
-    return "janken";
+    return "match";
   }
-
-  /*
-   * @GetMapping("/janken")
-   * public String janken(@RequestParam(required = false) String hand,
-   * Principal prin, ModelMap model) {
-   * String loginUser = prin.getName();
-   * // this.entry.addUser(loginUser);
-   * // model.addAttribute("entry", this.entry);
-   * model.addAttribute("username", loginUser);
-   * String cpuHand = "rock";
-   * String result = "";
-   *
-   * if (hand != null) {
-   * if (hand.equals("rock")) {
-   * result = cpuHand.equals("rock") ? "引き分け" : (cpuHand.equals("scissors") ? "勝ち"
-   * : "負け");
-   * } else if (hand.equals("scissors")) {
-   * result = cpuHand.equals("rock") ? "負け" : (cpuHand.equals("scissors") ? "引き分け"
-   * : "勝ち");
-   * } else if (hand.equals("paper")) {
-   * result = cpuHand.equals("rock") ? "勝ち" : (cpuHand.equals("scissors") ? "負け" :
-   * "引き分け");
-   * }
-   * }
-   *
-   * model.addAttribute("result", result);
-   * model.addAttribute("userHand", hand);
-   * model.addAttribute("cpuHand", cpuHand);
-   *
-   * return "janken";
-   * }
-   *
-   * @GetMapping("/janken.html")
-   * public String jankenHtml(@RequestParam(required = false) String name,
-   * ModelMap model) {
-   * ArrayList<User> users = UserMapper.selectAllName();
-   * model.addAttribute("users", users);
-   * if (name != null && !name.isEmpty()) {
-   * model.addAttribute("name", name);
-   * // 名前が入力されている場合にのみモデルに追加
-   * }
-   * return "janken";
-   * }
-   */
-
-  /*
-   * @GetMapping("/janken.html")
-   *
-   * @Transactional
-   * public String jankenHtml(Principal prin, ModelMap model) {
-   * ArrayList<User> chambers5 = UserMapper.selectAllByChamberName();
-   * model.addAttribute("chambers5", chambers5);
-   * String loginUser = prin.getName();
-   * model.addAttribute("entry", this.entry);
-   * model.addAttribute("username", loginUser);
-   * return "janken";
-   * }
-   */
 }
