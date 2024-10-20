@@ -18,13 +18,9 @@ import oit.is.z2421.kaizi.janken.model.MatchMapper;
 import oit.is.z2421.kaizi.janken.model.User;
 import oit.is.z2421.kaizi.janken.model.UserMapper;
 
-/*
- * クラスの前に@Controllerをつけていると，HTTPリクエスト（GET/POSTなど）があったときに，このクラスが呼び出される
- */
 @Controller
 public class JankenController {
 
-  // private Entry entry;
   @Autowired
   private UserMapper UserMapper;
   @Autowired
@@ -47,13 +43,22 @@ public class JankenController {
   }
 
   @GetMapping("/match")
-  public String match(@RequestParam(required = false) String hand,
-      @RequestParam int id,
-      ModelMap model, Principal prin) {
+  public String match(@RequestParam int cpuid, ModelMap model, Principal prin) {
 
     String loginUser = prin.getName();
     model.addAttribute("name", loginUser);
-    String cpuHand = "rock"; // CPUの手（固定）
+    User cpu = UserMapper.selectById(cpuid);
+    model.addAttribute("cpu", cpu);
+
+    return "match";
+  }
+
+  @GetMapping("/fight")
+  public String fight(@RequestParam String hand, @RequestParam int cpuid, Principal prin, ModelMap model) {
+
+    String loginUser = prin.getName();
+    model.addAttribute("name", loginUser);
+    String cpuHand = "rock";
     String result = "";
 
     if (hand != null) {
@@ -70,8 +75,15 @@ public class JankenController {
     model.addAttribute("userHand", hand);
     model.addAttribute("cpuHand", cpuHand);
 
-    User user = UserMapper.selectById(id);
-    model.addAttribute("user", user);
+    User cpu = UserMapper.selectById(cpuid);
+    model.addAttribute("cpu", cpu);
+    User player = UserMapper.selectByName(loginUser);
+    Match newMatch = new Match();
+    newMatch.setUser1(player.getId());
+    newMatch.setUser1Hand(hand);
+    newMatch.setUser2(cpu.getId());
+    newMatch.setUser2Hand(cpuHand);
+    MatchMapper.insertMatch(newMatch);
 
     return "match";
   }

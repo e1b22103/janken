@@ -12,14 +12,14 @@ public interface UserMapper {
   @Select("SELECT id,name from users where id = #{id}")
   User selectById(int id);
 
-  @Insert("INSERT INTO users (name) VALUES (#{name});")
-  @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
-  void insertUser(User user);
-
   @Select("SELECT * from users where name = #{name}")
-  ArrayList<User> selectAllByName(String name);
+  User selectByName(String name);
 
   @Select("SELECT id,name from users")
   ArrayList<User> selectAllName();
+
+  @Insert("INSERT INTO users (name) VALUES (#{name});")
+  @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
+  void insertUser(User user);
 
 }

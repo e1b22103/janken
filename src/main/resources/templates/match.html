@@ -10,21 +10,22 @@
   <p><a href="/logout">ログアウト</a></p>
   <h1>Match</h1>
 
-  <h2 th:if="${name != null and user != null}">
+  <h2 th:if="${name != null and cpu != null}">
     <span th:text="${name}"></span> V.S.
-    <span th:text="${user.name}"></span>
+    <span th:text="${cpu.name}"></span>
   </h2>
 
-  <p>
+  <p th:if="${cpu != null}">
     <span>Select Your Hand: </span>
-    <a href="/match?hand=rock">rock</a>
-    <a href="/match?hand=scissors">scissors</a>
-    <a href="/match?hand=paper">paper</a>
+    <a th:href="@{/fight(hand='rock', cpuid=${cpu.id})}">rock</a>
+    <a th:href="@{/fight(hand='scissors', cpuid=${cpu.id})}">scissors</a>
+    <a th:href="@{/fight(hand='paper', cpuid=${cpu.id})}">paper</a>
   </p>
+
   <div th:if="${userHand != null}">
-    <p>あなたの手: <span th:text="${userHand}"></span></p>
-    <p>相手の手: <span th:text="${cpuHand}"></span></p>
-    <p>結果: <span th:text="${result}"></span></p>
+    <span>あなたの手: <span th:text="${userHand}"></span></span><br />
+    <span>相手の手: <span th:text="${cpuHand}"></span></span><br />
+    <span>結果: <span th:text="${result}"></span></span><br />
   </div>
 
   <p><a href="/janken">もどる</a></p>
