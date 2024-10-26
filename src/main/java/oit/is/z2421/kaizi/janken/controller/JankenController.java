@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 //import oit.is.z2421.kaizi.janken.model.Entry;
+import oit.is.z2421.kaizi.janken.model.MatchInfo;
+import oit.is.z2421.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z2421.kaizi.janken.model.Match;
 import oit.is.z2421.kaizi.janken.model.MatchMapper;
 import oit.is.z2421.kaizi.janken.model.User;
@@ -25,6 +27,8 @@ public class JankenController {
   private UserMapper UserMapper;
   @Autowired
   private MatchMapper MatchMapper;
+  @Autowired
+  private MatchInfoMapper MatchInfoMapper;
 
   @GetMapping("/janken")
   public String janken(Principal prin, ModelMap model) {
@@ -51,6 +55,24 @@ public class JankenController {
     model.addAttribute("cpu", cpu);
 
     return "match";
+  }
+
+  @GetMapping("/wait")
+  public String wait(@RequestParam String hand, @RequestParam int cpuid, Principal prin, ModelMap model) {
+
+    String loginUser = prin.getName();
+    model.addAttribute("name", loginUser);
+    User cpu = UserMapper.selectById(cpuid);
+    model.addAttribute("cpu", cpu);
+    User player = UserMapper.selectByName(loginUser);
+    MatchInfo newMatchInfo = new MatchInfo();
+    newMatchInfo.setUser1(player.getId());
+    newMatchInfo.setUser1Hand(hand);
+    newMatchInfo.setUser2(cpu.getId());
+    newMatchInfo.setIsActive(true);
+    MatchInfoMapper.insertMatchInfo(newMatchInfo);
+
+    return "wait";
   }
 
   @GetMapping("/fight")

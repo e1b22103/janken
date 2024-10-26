@@ -17,9 +17,9 @@
 
   <p th:if="${cpu != null}">
     <span>Select Your Hand: </span>
-    <a th:href="@{/fight(hand='rock', cpuid=${cpu.id})}">rock</a>
-    <a th:href="@{/fight(hand='scissors', cpuid=${cpu.id})}">scissors</a>
-    <a th:href="@{/fight(hand='paper', cpuid=${cpu.id})}">paper</a>
+    <a th:href="@{/wait(hand='rock', cpuid=${cpu.id})}">rock</a>
+    <a th:href="@{/wait(hand='scissors', cpuid=${cpu.id})}">scissors</a>
+    <a th:href="@{/wait(hand='paper', cpuid=${cpu.id})}">paper</a>
   </p>
 
   <div th:if="${userHand != null}">
