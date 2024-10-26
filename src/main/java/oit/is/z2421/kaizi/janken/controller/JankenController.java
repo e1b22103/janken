@@ -41,6 +41,8 @@ public class JankenController {
     model.addAttribute("users", users);
     ArrayList<Match> matches = MatchMapper.selectAllData();
     model.addAttribute("matches", matches);
+    ArrayList<MatchInfo> actives = MatchInfoMapper.selectByIsActive();
+    model.addAttribute("actives", actives);
 
     // janken.html テンプレートを表示
     return "janken";
