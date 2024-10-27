@@ -4,11 +4,36 @@
 <head>
   <meta charset="utf-8">
   <title>wait</title>
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/fight');
+      sse.onmessage = function (event) {
+        var matchData = JSON.parse(event.data);
+        console.log(event.data);
+        document.getElementById("h1").innerHTML = "結果";
+        document.getElementById("result").innerHTML =
+          "Match ID: " + matchData.id + "<br>" +
+          "User1 ID: " + matchData.user1 + "<br>" +
+          "User1 Hand: " + matchData.user1Hand + "<br>" +
+          "User2 ID: " + matchData.user2 + "<br>" +
+          "User2 Hand: " + matchData.user2Hand + "<br>" +
+          '<a href="/janken">もどる</a>';
+      }
+      sse.onerror = function(event) {
+        console.error("SSE Error: ", event);
+      }
+    }
+  </script>
 </head>
 
 <body>
   <h1>相手の手を待っています</h1>
-  <p th:if="${name != null}">Hi <span th:text="${name}"></span>!</p>
+  <p th:if="${name != null}">
+    Hi <span th:text="${name}"></span>!
+  </p>
+
+  <h1 id="h1"></h1>
+  <p id="result"></p>
 </body>
 
 </html>

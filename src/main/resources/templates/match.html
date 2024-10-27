@@ -22,11 +22,11 @@
     <a th:href="@{/wait(hand='paper', cpuid=${cpu.id})}">paper</a>
   </p>
 
-  <div th:if="${userHand != null}">
+  <!-- <div th:if="${userHand != null}">
     <span>あなたの手: <span th:text="${userHand}"></span></span><br />
     <span>相手の手: <span th:text="${cpuHand}"></span></span><br />
     <span>結果: <span th:text="${result}"></span></span><br />
-  </div>
+  </div> -->
 
   <p><a href="/janken">もどる</a></p>
 </body>
